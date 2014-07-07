@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/DropboxSimone/Dropbox/beckup/workspace/Libraries/external/javacsv2.1.jar" sourcepath="C:/Users/Simone/Dropbox/beckup/workspace/Libraries/external/javacsv2.1.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/Users/Simone/Dropbox/beckup/workspace/Libraries/external/javacsv2.1.jar!/doc"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/DropboxSimone/Dropbox/beckup/workspace/Libraries/external/juniversalchardet-1.0.3.jar"/>
+	<classpathentry kind="lib" path="C:/DropboxSimone/Dropbox/beckup/workspace/Libraries/external/postgis-jdbc-2.1.0SVN.jar"/>
+	<classpathentry kind="lib" path="C:/DropboxSimone/Dropbox/beckup/workspace/Libraries/external/postgresql-9.2-1001.jdbc4.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
