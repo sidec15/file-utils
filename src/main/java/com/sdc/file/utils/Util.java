@@ -5,6 +5,7 @@ import java.awt.image.RenderedImage;
 import java.io.*;
 import java.nio.channels.FileChannel;
 import java.util.*;
+import java.util.zip.ZipException;
 
 import javax.imageio.ImageIO;
 import javax.xml.transform.OutputKeys;
@@ -20,75 +21,12 @@ import org.w3c.dom.Document;
 import com.sdc.file.exception.TableException;
 import com.sdc.file.exception.TextFormatException;
 import com.sdc.file.structures.Table;
+import com.sdc.file.zip.UtilZip;
 
 
 public class Util {
 	
 	private static String NEWLINE=System.getProperty("line.separator");
-	
-	@SuppressWarnings("unused")
-	public static void main(String []args) throws TextFormatException, IOException, TableException {
-		
-		if (false) {
-			
-//		System.out.println( textFileEquals("C:\\Users\\Simone\\workspace\\Ferrovie\\OutputData\\ATAC_codeseConFerrovie.txt",
-//				"C:\\Users\\Simone\\Desktop\\ATAC_codeseConFerrovie.txt"));
-//		System.out.println(Arrays.toString(readFile("ATAC_codese.txt")));
-//		readFile("C:\\Users\\Simone\\workspace\\Ferrovie\\ATAC_anagservizioprogConFerrovie.txt");
-//		System.out.println("Elaborating...");
-//		boolean b =textFileEquals("C:\\Users\\Simone\\Desktop\\HyperPath Transit\\trunk\\data\\ATAC\\ATAC_anagservizioprogConFerrovie.txt",
-//				"C:\\Users\\Simone\\Desktop\\HyperPath Transit\\trunk\\data\\ATAC\\ATAC_anagservizioprog.txt");
-//		boolean b =textFileEquals("C:\\Users\\Simone\\Desktop\\ATAC_anagservizioprog.txt",
-//				"C:\\Users\\Simone\\Desktop\\ATAC_anagservizioprogModificata.txt");
-//		System.out.println(b);
-		
-//		try {
-//			imageToByteArray("C:\\Users\\Simone\\Desktop\\Nuova Cartella\\Squall.JPG");
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-		
-//		System.out.println("size in mb of: C:\\Users\\Simone\\Desktop\\Nuova cartella :" + getSizeMB("C:\\Users\\Simone\\Desktop\\Nuova cartella"));
-//		System.out.println("size in mb of: C:\\Users\\Simone\\Desktop\\Nuova cartella :" + getNumberOfFiles("C:\\Users\\Simone\\Desktop\\Nuova cartella"));
-
-//		System.out.println(new File("C:\\Users\\Simone\\Desktop\\Nuova cartella\\Nuova cartella2"));
-	
-//		File f = new File("C:\\MSOCache");
-		//File f = new File("C:\\Nuova cartella");
-
-//		String[] table;
-//		try {
-//			table = readFile("prova.csv");
-//			System.out.println(FormatTable("test", table, ",", "#", 2));
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		} catch (TextFormatException e) {
-//			e.printStackTrace();
-//		}
-		
-//		String filePath="C:\\Users\\Simone\\Lavoro SISTeMA\\repo\\TDE\\branches\\GoogleTransit\\exec\\multiImport_output\\output_dval.csv";
-//		boolean makeNewFile=true;
-//		boolean fieldsInSameRowOfName=false;
-//		boolean compact=false;
-//		Table.FormatTablesInTxtFile(filePath, "$", ":", ',', '#', '"', compact, makeNewFile, fieldsInSameRowOfName);
-//		Table t=Table.getTableInFile("C:\\Users\\Simone\\Desktop\\new 2.txt", "OPTIMIZATION", "$", ":", ',', '#','"',false);
-//		System.out.println(t.toString());
-		
-//		String filePath="CommandLine.csv";
-//		System.out.println(getFileEncoding(filePath));
-		
-		Integer[] v= {1,1,1};
-		System.out.println("v: " + Arrays.toString(v));
-		Integer[] u= {1};
-		System.out.println("u: " + Arrays.toString(u));
-
-		Object[][] v1=com.sdc.file.utils.Util.splitArray(v, u);
-		for (int i = 0; i < v1.length; i++) {
-			System.out.println("oc"+i+": "+ Arrays.toString(v1[i]));
-		}
-		
-		}
-	}
 	
 	/**
 	 * Return <i>true</i> if a text file with path f1 is equal to a text file with path f2.
