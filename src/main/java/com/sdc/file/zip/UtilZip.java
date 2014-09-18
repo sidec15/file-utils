@@ -9,7 +9,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Enumeration;
 import java.util.zip.*;
+
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipFile;
+
+import com.sdc.file.utils.Util;
 
 
 /**
@@ -37,32 +44,41 @@ public class UtilZip {
 		else if (output != null && !output.equals("") && !output.endsWith("\\") && !output.endsWith("/"))
 			throw new ZipException(output + " is not a directory");
 
-		BufferedOutputStream dest =null;
+		File f=new File(output);
+		if(!f.exists()) {
+			f.mkdirs();
+		}
+		
 		FileInputStream fis=null;
-		ZipInputStream zis=null;
+		ZipFile zif=null;
 		try {
-			dest = null;
-			fis = new FileInputStream(input);
-			zis = new ZipInputStream(
-					new BufferedInputStream(fis));
-			ZipEntry entry;
-			while ((entry = zis.getNextEntry()) != null) {
-				int count;
+			zif = new ZipFile(input);
+			ZipArchiveEntry entry;
+			Enumeration<ZipArchiveEntry> entries = zif.getEntries();
+			FileOutputStream fos;
+			InputStream is;
+			
+			while (entries.hasMoreElements()) {
+				int n;
 				byte data[] = new byte[BUFFER];
+				entry= entries.nextElement();
 				// write the files to the disk
-				FileOutputStream fos = new FileOutputStream(output+entry.getName());
-				dest = new BufferedOutputStream(fos, BUFFER);
-				while ((count = zis.read(data, 0, BUFFER)) != -1) {
-					dest.write(data, 0, count);
-				}
+				fos = new FileOutputStream(output+entry.getName());
+				is = zif.getInputStream(entry);
+                while ((n = is.read(data)) != -1) {
+                    if (n > 0) {
+                        fos.write(data, 0, n);
+                    }
+                }				
+				if(fos!=null) fos.close();
+				if(is!=null) is.close();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
 			try {
-				dest.flush();
-				dest.close();
-				zis.close();
+				if(fis!=null) fis.close();
+				if(zif!=null) zif.close();
 			} catch (IOException e) {}
 		}
 

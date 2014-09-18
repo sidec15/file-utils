@@ -104,9 +104,29 @@ public class TestFileUtil {
 			e.printStackTrace();
 		} finally {
 			Util.removeDirectoryContent(f);
-			assertTrue("OutPut directory is not empty", f.listFiles().length > 0);
+			assertTrue("OutPut directory is not empty", f.listFiles().length == 0);
 		}
 
 	}
 
+	
+	public void testGTFS() {
+		File f = null;
+		String outputDirPath;
+		try {
+			outputDirPath = "/fileTest/output/";
+			UtilZip.decompress(TestFileUtil.class.getResource("/fileTest/google_transit.zip").getPath(), TestFileUtil.class.getResource(outputDirPath).getPath());
+			// check if file exists
+			f = new File(TestFileUtil.class.getResource(outputDirPath).getPath());
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			Util.removeDirectoryContent(f);
+			assertTrue("OutPut directory is not empty", f.listFiles().length == 0);
+		}
+
+	}
+	
 }
