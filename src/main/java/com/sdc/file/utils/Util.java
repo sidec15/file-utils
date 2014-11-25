@@ -4,8 +4,13 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.*;
 import java.nio.channels.FileChannel;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
-import java.util.zip.ZipException;
 
 import javax.imageio.ImageIO;
 import javax.xml.transform.OutputKeys;
@@ -21,12 +26,98 @@ import org.w3c.dom.Document;
 import com.sdc.file.exception.TableException;
 import com.sdc.file.exception.TextFormatException;
 import com.sdc.file.structures.Table;
-import com.sdc.file.zip.UtilZip;
 
 
 public class Util {
 	
 	private static String NEWLINE=System.getProperty("line.separator");
+	
+	public static void main(String[] args) throws ClassNotFoundException, SQLException, TableException {
+
+	    String query = "select poin from snod";
+        System.out.println("Executing query: " + query);
+        try
+        {
+                Class.forName("org.postgresql.Driver");
+                
+        } catch (ClassNotFoundException e) {
+             
+            //System.out.println("Where is your PostgreSQL JDBC Driver? " + "Include in your library path!");
+            //e.printStackTrace();
+            throw e;
+        }
+        List<Object[]> list_content=null;
+        Connection conn=null;
+        Statement stm=null;
+        ResultSet rset=null;
+
+        //Connection conn=DriverManager.getConnection( "jdbc:mysql://localhost/simone", "root", "zell88squall" );
+        conn=DriverManager.getConnection("jdbc:postgresql://localhost:5432/gratz", "postgres", "postgres");
+
+        stm=conn.createStatement();
+        int righe=0;
+        
+        boolean countFirst=false;
+        if(query.startsWith("select count")) countFirst=false;
+        if(countFirst) {
+            String countQuery=query.toLowerCase();
+            int kk=countQuery.indexOf("from");
+            countQuery="select count(*) " + countQuery.substring(kk,countQuery.length());
+            rset=stm.executeQuery(countQuery);
+            rset.next();
+            righe=Integer.parseInt(""+ rset.getObject(1));
+            stm=conn.createStatement();
+        }
+        boolean resultSetInMemory=true;
+        if(!resultSetInMemory) {
+            conn.setAutoCommit(false);
+            stm.setFetchSize(1);
+        }
+
+        rset=stm.executeQuery(query);
+        ResultSetMetaData rsmd=rset.getMetaData();//serve per ottenere info sul resultSet
+        int colonne=rsmd.getColumnCount();
+        //int righe=getNumRows(rset)+1;
+        
+        //riempio m
+        //nomi campi
+        String[] fields=new String[colonne];
+        for(int j=1;j<colonne+1;j++)
+            fields[j-1]=rsmd.getColumnLabel(j);
+        
+        //righe successive
+        Object[] tmp_content=null;
+        list_content=new ArrayList<Object[]>(righe);
+        while(rset.next()) {
+            tmp_content=new Object[colonne];
+            for(int j=1;j<colonne+1;j++)
+                tmp_content[j-1]=rset.getObject(j);
+            list_content.add(tmp_content);
+        }
+        
+        righe=list_content.size();
+                
+//      String[][] content=new String[righe][colonne];
+//      for(int i=0;i<righe;i++)
+//          content[i]=list_content.get(i);
+            
+        Table table=null;
+        try
+        {
+            table = new Table("ResultSet",fields,(ArrayList<Object[]>) list_content,'#');
+        } catch (TableException e) {
+            throw e;
+        }finally {
+            if(rset!=null)
+                rset.close();
+            if(stm!=null)
+                stm.close();
+            if(conn!=null)
+                conn.close();
+        }
+
+
+    }
 	
 	/**
 	 * Return <i>true</i> if a text file with path f1 is equal to a text file with path f2.
