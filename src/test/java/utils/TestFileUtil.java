@@ -90,7 +90,7 @@ public class TestFileUtil {
 		String outputDirPath;
 		try {
 			outputDirPath = "/fileTest/output/";
-			UtilZip.decompress(TestFileUtil.class.getResource("/fileTest/prova.zip").getPath(), TestFileUtil.class.getResource(outputDirPath).getPath());
+			UtilZip.decompress(getClass().getResource("/fileTest/prova.zip").getPath(),getClass().getResource(outputDirPath).getPath());
 			// check if file exists
 			f = new File(TestFileUtil.class.getResource(outputDirPath).getPath());
 
