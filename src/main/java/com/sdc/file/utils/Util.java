@@ -30,7 +30,7 @@ import com.sdc.file.structures.Table;
 
 public class Util {
 	
-	private static String NEWLINE=System.getProperty("line.separator");
+	public static String NEWLINE=System.getProperty("line.separator");
 	
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, TableException {
 
