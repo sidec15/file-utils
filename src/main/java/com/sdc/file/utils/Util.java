@@ -20,7 +20,17 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.geotools.data.DefaultTransaction;
+import org.geotools.data.Transaction;
+import org.geotools.data.collection.ListFeatureCollection;
+import org.geotools.data.shapefile.ShapefileDataStore;
+import org.geotools.data.shapefile.ShapefileDataStoreFactory;
+import org.geotools.data.simple.SimpleFeatureCollection;
+import org.geotools.data.simple.SimpleFeatureSource;
+import org.geotools.data.simple.SimpleFeatureStore;
 import org.mozilla.universalchardet.UniversalDetector;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
 import org.w3c.dom.Document;
 
 import com.sdc.file.exception.TableException;
@@ -1460,4 +1470,68 @@ public class Util {
 		return processes;
 	}
 
+    public static File createShapeFile(String filePath, SimpleFeatureType featureType, List<SimpleFeature> features) throws Exception {
+
+        File file = new File(filePath);
+
+        ShapefileDataStoreFactory dataStoreFactory = new ShapefileDataStoreFactory();
+
+        Map<String, Serializable> params = new HashMap<String, Serializable>();
+        params.put("url", file.toURI().toURL());
+        params.put("create spatial index", Boolean.TRUE);
+
+        ShapefileDataStore newDataStore = (ShapefileDataStore) dataStoreFactory.createNewDataStore(params);
+
+        /*
+         * TYPE is used as a template to describe the file contents
+         */
+        newDataStore.createSchema(featureType);
+
+        /*
+         * Write the features to the shapefile
+         */
+        Transaction transaction = new DefaultTransaction("create");
+
+        String typeName = newDataStore.getTypeNames()[0];
+        SimpleFeatureSource featureSource = newDataStore.getFeatureSource(typeName);
+        // SimpleFeatureType SHAPE_TYPE = featureSource.getSchema();
+        /*
+         * The Shapefile format has a couple limitations:
+         * - "the_geom" is always first, and used for the geometry attribute name
+         * - "the_geom" must be of type Point, MultiPoint, MuiltiLineString, MultiPolygon
+         * - Attribute names are limited in length
+         * - Not all data types are supported (example Timestamp represented as Date)
+         * 
+         * Each data store has different limitations so check the resulting SimpleFeatureType.
+         */
+
+        if (featureSource instanceof SimpleFeatureStore) {
+            SimpleFeatureStore featureStore = (SimpleFeatureStore) featureSource;
+            /*
+             * SimpleFeatureStore has a method to add features from a
+             * SimpleFeatureCollection object, so we use the ListFeatureCollection
+             * class to wrap our list of features.
+             */
+            SimpleFeatureCollection collection = new ListFeatureCollection(featureType, features);
+            featureStore.setTransaction(transaction);
+            try {
+                featureStore.addFeatures(collection);
+                transaction.commit();
+            }
+            catch (Exception problem) {
+                transaction.rollback();
+                throw problem;
+            }
+            finally {
+                transaction.close();
+            }
+        }
+        else {
+            throw new Exception(typeName + " does not support read/write access");
+        }
+        return file;
+
+    }
+
+	
 }
