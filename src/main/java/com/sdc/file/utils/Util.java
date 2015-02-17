@@ -480,6 +480,7 @@ public class Util {
 
     /**
      * Read a file and return the content into a {@link String}
+<<<<<<< HEAD
      * 
      * @param uri
      * @param charset
@@ -991,6 +992,7 @@ public class Util {
 
         return getFilesInDirectoryRic(filePath, null);
     }
+
 
     /**
      * Return the number of all the files contained in the <i>directory</i>
