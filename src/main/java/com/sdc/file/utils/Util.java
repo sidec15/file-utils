@@ -3,7 +3,11 @@ package com.sdc.file.utils;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.*;
+import java.net.URI;
 import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -474,6 +478,59 @@ public class Util {
 
     }
 
+    /**
+     * Read a file and return the content into a {@link String}
+     * @param uri
+     * @param charset if <code>null</code> is not considered
+     * @return <code>null</code> if the {@link File} doesn't exists.
+     */
+    public static String readFileCompact(URI uri,Charset charset){
+        try {
+            if(charset !=null)
+                return new String(Files.readAllBytes(Paths.get(uri)),charset);
+            else
+                return new String(Files.readAllBytes(Paths.get(uri)));
+        }
+        catch (IOException e) {}
+        return null;
+    }
+    
+    /**
+     * Read a file and return the content into a {@link String}
+     * @param uri
+     * @return <code>null</code> if the {@link File} doesn't exists.
+     */
+    public static String readFileCompact(URI uri){
+        return readFileCompact(uri,null);
+    }
+    
+    /**
+     * Read a file and return the content into a {@link String}
+     * @param filePath
+     * @param charset if <code>null</code> is not considered
+     * @return <code>null</code> if the {@link File} doesn't exists.
+     */
+    public static String readFileCompact(String filePath,Charset charset){
+        URI uri=new File(filePath).toURI();
+        try {
+            if(charset !=null)
+                return new String(Files.readAllBytes(Paths.get(uri)),charset);
+            else
+                return new String(Files.readAllBytes(Paths.get(uri)));
+        }
+        catch (IOException e) {}
+        return null;
+    }
+    
+    /**
+     * Read a file and return the content into a {@link String}
+     * @param filePath
+     * @return <code>null</code> if the {@link File} doesn't exists.
+     */
+    public static String readFileCompact(String filePath){
+        return readFileCompact(filePath,null);
+    }
+    
     // **************** END READ FILES METHODS*****************************
 
     // ******************* WRITE FILES METHODS*****************************
