@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.sdc</groupId>
     <artifactId>FileUtils</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <name>FileUtils</name>
 
 	<!-- <distributionManagement> -->
@@ -183,5 +183,5 @@
         </repository>
     </repositories>
 
-    <description>* Added method to find files in directory, filtered according to regex</description>
+    <description>* Added Table iterator</description>
 </project>

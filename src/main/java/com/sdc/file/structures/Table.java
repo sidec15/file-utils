@@ -4,7 +4,6 @@
 package com.sdc.file.structures;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -15,6 +14,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
@@ -31,7 +31,7 @@ import com.sdc.file.utils.Util;
  * @author Simone De Cristofaro
  * @created 10/ott/2012
  */
-public class Table {
+public class Table implements Iterable<Object[]>{
 	private static String NEWLINE=System.getProperty("line.separator");
 	private static final SimpleDateFormat sdf=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	
@@ -40,7 +40,7 @@ public class Table {
 	private int nRows;
 	private int nRowsIncludeComment;
 	private int nFields;
-	private ArrayList<Object[]> content;
+	private List<Object[]> content;
 	private String fields[];
 	private HashMap<String, Integer> coll_fields;
 	/**
@@ -75,7 +75,7 @@ public class Table {
 	 */
 	public Table(String name,String fields[], ArrayList<Object[]> content,char commentIdentifier) throws TableException {
 		super();
-		createFromArraylist(name, fields, content, commentIdentifier);
+		createFromList(name, fields, content, commentIdentifier);
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class Table {
 		for(int i=0;i<content.length;i++)
 			tmp_content.add(content[i]);
 		
-		createFromArraylist(name, fields, tmp_content, commentIdentifier);
+		createFromList(name, fields, tmp_content, commentIdentifier);
 		
 	}
 	
@@ -210,7 +210,7 @@ public class Table {
 
 	}
 	
-	private void createFromArraylist(String name,String fields[], ArrayList<Object[]> content,char commentIdentifier) throws TableException {
+	private void createFromList(String name,String fields[], List<Object[]> content,char commentIdentifier) throws TableException {
 		this.name = name;
 		this.content = content;
 		this.fields=fields;
@@ -371,7 +371,7 @@ public class Table {
 		for(int i=0;i<data.length;i++)
 			tmp_content.add(data[i]);
 		
-		createFromArraylist(name, fields, content, commentIdentifier);
+		createFromList(name, fields, content, commentIdentifier);
 	}
 	
 	/* (non-Javadoc)
@@ -410,6 +410,14 @@ public class Table {
 	        
 	        it.remove(); // avoids a ConcurrentModificationException
 	    }		
+	}
+	
+	/**
+	 * Get the {@link Iterator} to loop over the data
+	 * @return {@link Iterator}
+	 */
+	public Iterator<Object[]> iterator(){
+		return content.iterator();
 	}
 	
 	//******************************************************************************************************************************
@@ -659,9 +667,7 @@ public class Table {
 	 */
 	public static Table getTableInFile(String filePath,String tableName,String tablePrefix,String tableSuffix,
 			char fieldSeparator,char commentIdentifier,char textQualifier, boolean fieldsInSameStringOfName) throws TableException, IOException{
-		
-		File file = new File(filePath);
-					
+							
 		if(tableName==null || tableName.equals(""))
 			throw new TableException("Bad input format. Check the name of the table");
 		
