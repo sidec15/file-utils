@@ -9,7 +9,11 @@ package com.sdc.file.exception;
  */
 public class TableException extends Exception{
 	
-	public TableException(String m) {super(m);};
+	/**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    public TableException(String m) {super(m);};
 	public TableException() {super();}
 	public TableException(String message,Throwable innerException) {
 		super(message, innerException);
