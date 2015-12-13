@@ -40,6 +40,7 @@ import org.w3c.dom.Document;
 
 import com.sdc.file.exception.TableException;
 import com.sdc.file.exception.TextFormatException;
+import com.sdc.file.structures.OS;
 import com.sdc.file.structures.Table;
 
 public class Util {
@@ -116,21 +117,21 @@ public class Util {
         // for(int i=0;i<righe;i++)
         // content[i]=list_content.get(i);
 
-        Table table = null;
-        try {
-            table = new Table("ResultSet", fields, (ArrayList<Object[]>) list_content, '#');
-        }
-        catch (TableException e) {
-            throw e;
-        }
-        finally {
-            if (rset != null)
-                rset.close();
-            if (stm != null)
-                stm.close();
-            if (conn != null)
-                conn.close();
-        }
+//        Table table = null;
+//        try {
+//            table = new Table("ResultSet", fields, (ArrayList<Object[]>) list_content, '#');
+//        }
+//        catch (TableException e) {
+//            throw e;
+//        }
+//        finally {
+//            if (rset != null)
+//                rset.close();
+//            if (stm != null)
+//                stm.close();
+//            if (conn != null)
+//                conn.close();
+//        }
 
     }
 
@@ -145,6 +146,7 @@ public class Util {
      *         <i>false</i> otherwise
      * @throws IOException
      */
+    @SuppressWarnings("resource")
     public static boolean textFileEquals(String f1, String f2) throws IOException {
 
         String[] firstFile = readFile(f1);
@@ -647,6 +649,7 @@ public class Util {
      *            Path of destination file
      * @throws IOException
      */
+    @SuppressWarnings("resource")
     public static void copyFile(File sourceFile, File destinationFile) throws IOException {
 
         FileChannel source = null;
@@ -1791,5 +1794,27 @@ public class Util {
         return file;
 
     }
+
+    /**
+     * 
+     * @return The {@link OS Operating System} type
+     */
+    public static OS getOperatingSystem() {
+
+        String s = System.getProperty("os.name").toLowerCase();
+        
+        if(s.indexOf("win") >= 0)
+            return OS.WINDOWS;
+        else if(s.indexOf("mac") >= 0)
+            return OS.MAC;
+        else if(s.indexOf("nix") >= 0 || s.indexOf("nux") >= 0 || s.indexOf("aix") > 0 )
+            return OS.MAC;
+        else if((System.getProperty("os.name").toLowerCase().indexOf("sunos") >= 0))
+            return OS.SOLARIS;
+        else
+            return OS.UNKNOWN;
+
+    }
+
 
 }
