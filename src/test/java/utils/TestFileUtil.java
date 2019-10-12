@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import com.sdc.file.utils.Util;
 import com.sdc.file.zip.UtilZip;
-import com.sdc.file.*;
 import static org.junit.Assert.*;
 
 /**

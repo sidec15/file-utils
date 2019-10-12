@@ -4,13 +4,9 @@
 package com.sdc.file.support;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.Random;
 
 import com.sdc.file.structures.COORDINATES_TYPE;
-
-
-import sun.applet.Main;
 
 /**
  * @author Simone De Cristofaro
@@ -23,20 +19,18 @@ public class Support {
 	
 	
 	/**
-	 * Return a random integer according to the specified bounds
 	 * @param min Lower bound (includec)
 	 * @param max Upper bound (included)
-	 * @return
+	 * @return a random integer according to the specified bounds
 	 */
 	public static int getRandomInt(int min,int max) {
 		return (int) ((max+1-min)* Math.random())+min;
 	}
 	
 	/**
-	 * Return a random double according to the specified bounds
 	 * @param min Lower bound (includec)
 	 * @param max Upper bound (included)
-	 * @return
+	 * @return a random double according to the specified bounds
 	 */
 	public static double getRandomDouble(double min,double max) {
 		double random = new Random().nextDouble();
@@ -55,9 +49,8 @@ public class Support {
 	
 	
 	/**
-	 * Return a formatted string: <i>nDays d nHours h nMinutes m nSeconds s nMilliSeconds ms</i>; e.g "1 d 2 h 40 m 30 s 100 ms"
 	 * @param l Instant to format in milliseconds
-	 * @return
+	 * @return a formatted string: <i>nDays d nHours h nMinutes m nSeconds s nMilliSeconds ms</i>; e.g "1 d 2 h 40 m 30 s 100 ms"
 	 */
 	public static String formatTimer(long l) {
 		int day=0;
@@ -82,12 +75,12 @@ public class Support {
 	
 	
 	/**
-	 * Return the distance between the two points, considering coordinate type (degrees|metres)
 	 * @param x1 X coordinate of the first point
 	 * @param y1 Y coordinate of the first point
 	 * @param x2 X coordinate of the second point
 	 * @param y2 Y coordinate of the second point
-	 * @return
+	 * @param cType 
+	 * @return the distance between the two points, considering coordinate type (degrees|metres)
 	 */
 	public static double getDistance(double x1,double y1,double x2,double y2, COORDINATES_TYPE cType) {
         double sqrabx, sqraby;

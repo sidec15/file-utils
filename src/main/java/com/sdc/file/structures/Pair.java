@@ -6,6 +6,8 @@ package com.sdc.file.structures;
 /**
  * @author Simone
  * 11/dic/2012
+ * @param <T1> 
+ * @param <T2> 
  */
 public class Pair<T1,T2> {
 	
@@ -100,7 +102,6 @@ public class Pair<T1,T2> {
 		Pair<String, Integer> c1=new Pair<String, Integer>("Simone", 27);
 		Pair<String, Integer> c2=new Pair<String, Integer>("Kiara", 26);
 		Pair<Long, Long> c3=new Pair<Long, Long>(10l, 26l);
-		Pair<Integer, Integer> c4=new Pair<Integer, Integer>(10, 26);
 		Pair<String, Integer> c5=new Pair<String, Integer>("Simone", 27);
 		
 		System.out.println(c1.equals(c2));

@@ -5,7 +5,6 @@ package com.sdc.file.structures;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
@@ -66,25 +65,11 @@ public class Table implements Iterable<Object[]>{
 		this(name,fields,10,'#');
 	}
 
-	/**
-	 * 
-	 * @param name
-	 * @param fields
-	 * @param content
-	 * @throws TableException
-	 */
 	public Table(String name,String fields[], ArrayList<Object[]> content,char commentIdentifier) throws TableException {
 		super();
 		createFromList(name, fields, content, commentIdentifier);
 	}
 
-	/**
-	 * 
-	 * @param name
-	 * @param fields
-	 * @param initialCapacity
-	 * @throws TableException
-	 */
 	public Table(String name,String fields[], int initialCapacity,char comentIdentifier) throws TableException {
 		super();
 		this.name = name;
@@ -99,13 +84,6 @@ public class Table implements Iterable<Object[]>{
 		this.content=new ArrayList<Object[]>(initialCapacity);
 	}
 
-	/**
-	 * 
-	 * @param name
-	 * @param fields
-	 * @param content
-	 * @throws TableException
-	 */
 	public Table(String name,String fields[], Object[][] content,char commentIdentifier) throws TableException {
 		super();
 		
@@ -167,6 +145,10 @@ public class Table implements Iterable<Object[]>{
 	}
 	
 	//METHODS
+	public boolean isEmpty() {
+	    return nRows == 0;
+	}
+	
 	private void handleCommentedRows() throws TableException{
 		//get non commented rows
 		Object[] tmp_row=null;
@@ -236,7 +218,7 @@ public class Table implements Iterable<Object[]>{
 	}
 
 	/**
-	 * @param if <code>true</code> consider also the commented rows
+	 * @param includeComment if <code>true</code> consider also the commented rows
 	 * @return the nRecord
 	 */
 	public int getnRows(boolean includeComment) {
@@ -251,6 +233,10 @@ public class Table implements Iterable<Object[]>{
 		return getnRows(false);
 	}
 	
+	public int size() {
+	    return nRows;
+	}
+	
 	/**
 	 * @return the nField
 	 */
@@ -259,7 +245,7 @@ public class Table implements Iterable<Object[]>{
 	}
 
 	/**
-	 * @param if <code>true</code> include the commented rows
+	 * @param includeComment if <code>true</code> include the commented rows
 	 * @return the content
 	 */
 	public Object[][] getContent(boolean includeComment) {
@@ -296,21 +282,23 @@ public class Table implements Iterable<Object[]>{
 	}
 
 	/**
-	 * Return the value of the specified field at the specified row
 	 * @param fieldsName Name of the field
 	 * @param row Index of the row (starting from 0)
-	 * @return
+	 * @return the value of the specified field at the specified row
 	 */
 	public Object get(String fieldsName,int row) {
 		if(row<0 || row>=nRows || !coll_fields.containsKey(fieldsName)) return null;
 		return content.get(coll_nonCommentedRows.get(row))[coll_fields.get(fieldsName)];
 	}
 	
+	public int getColumnIndex(String columnName) {
+	    return coll_fields.get(columnName);
+	}
+	
 	/**
-	 * Return the value of the specified field at the specified row
 	 * @param fieldsIndex Index of the field (starting from 0)
 	 * @param row Index of the row (starting from 0)
-	 * @return
+	 * @return the value of the specified field at the specified row
 	 */
 	public Object get(int fieldsIndex,int row) {
 		if(row<0 || row>=nRows || fieldsIndex<0 || fieldsIndex>nFields ) return null;
@@ -423,15 +411,8 @@ public class Table implements Iterable<Object[]>{
 	//******************************************************************************************************************************
 	//TOSTRING
 	//******************************************************************************************************************************
-	/**
-	 * 
-	 * @param tablePrefix
-	 * @param tableSuffux
-	 * @param fieldSeparator
-	 * @param textQualifier
-	 * @param compact If <code>true</code> return a compacted view of the table
-	 * @return
-	 */
+
+
 	public String toString(String tablePrefix,String tableSuffux,char fieldSeparator,char textQualifier,boolean compact) {
 		if(compact)
 			return toStringCompact(tablePrefix, tableSuffux, fieldSeparator, textQualifier);
@@ -439,15 +420,6 @@ public class Table implements Iterable<Object[]>{
 			return toStringExpanded(tablePrefix, tableSuffux, fieldSeparator, textQualifier);
 	}
 	
-	/**
-	 * 
-	 * @param tablePrefix
-	 * @param tableSuffux
-	 * @param fieldSeparator
-	 * @param textQualifier
-	 * @param compact If <code>true</code> return a compacted view of the table
-	 * @return
-	 */
 	public String toString(String tablePrefix,String tableSuffux,char fieldSeparator,char textQualifier) {
 		return toStringExpanded(tablePrefix, tableSuffux, fieldSeparator, textQualifier);
 	}
@@ -575,16 +547,12 @@ public class Table implements Iterable<Object[]>{
 		return this.toStringExpanded("","",',','"');
 	}	
 	
-	public String toString(boolean compact) {
-		return toStringCompact("","",',','"');
-	}
 	//******************************************************************************************************************************
 	//******************************************************************************************************************************
 	//******************************************************************************************************************************
 
 	/**
-	 * Return a string that represent an insert query of the entire table
-	 * @return
+	 * @return a string that represent an insert query of the entire table
 	 */
 	public String getInsertQuery() {
 		if(content.size()==0) return "";
@@ -619,20 +587,13 @@ public class Table implements Iterable<Object[]>{
 		return sb.toString();
 	}
 	
-	/**
-	 * Return a random row
-	 * @param rowMin
-	 * @param rowMax
-	 * @return
-	 */
 	public Object[] getRandomRecord() {
 		return content.get(com.sdc.file.support.Support.getRandomInt(0, nRows-1));
 	}
 
 	/**
-	 * Return a random element of the specified field
 	 * @param fieldsIndex
-	 * @return
+	 * @return a random element of the specified field
 	 */
 	public Object getRandomElement(int fieldsIndex) {
 		if(fieldsIndex<0 || fieldsIndex>nFields ) return null;
@@ -640,9 +601,8 @@ public class Table implements Iterable<Object[]>{
 	}
 
 	/**
-	 * Return a random element of the specified field
-	 * @param fieldsIndex
-	 * @return
+	 * @param fieldsName
+	 * @return a random element of the specified field
 	 */
 	public Object getRandomElement(String fieldsName) {
 		if(!coll_fields.containsKey(fieldsName)) return null;
@@ -684,7 +644,12 @@ public class Table implements Iterable<Object[]>{
 		StringBuilder sb=new StringBuilder();
 		
 		try{
-			fr=new InputStreamReader(new FileInputStream(filePath), Util.getFileEncoding(filePath));
+		    
+		    String encoding = Util.getFileEncoding(filePath);
+            if (encoding != null)
+                fr = new InputStreamReader(new FileInputStream(filePath), encoding);
+            else
+                fr = new InputStreamReader(new FileInputStream(filePath));
 			reader= new BufferedReader(fr);
 			String text_line=reader.readLine();
 			
@@ -694,7 +659,7 @@ public class Table implements Iterable<Object[]>{
 			}
 			
 			if(text_line==null)
-				throw new TableException("Table: " + tableName + "; not found");
+				return new Table(); // empty table
 			
 			if(fieldsInSameStringOfName) {
 				text_line=text_line.substring(tmp_tableName.length());
@@ -721,10 +686,8 @@ public class Table implements Iterable<Object[]>{
 						
 			return Table.parse(sb.toString(), tableName,fieldSeparator,commentIdentifier,textQualifier);
 			
-		}catch(FileNotFoundException e){
+		}catch(Exception e){
 			throw new TableException(e.getMessage(),e);
-		}catch(IOException e){
-			throw e;
 		}finally{
 			try{
 				if(fr!=null)
@@ -747,7 +710,7 @@ public class Table implements Iterable<Object[]>{
 	 * @param fieldSeparator
 	 * @param commentIdentifier
 	 * @param textQualifier
-	 * @return
+	 * @return a {@link Table Table} from the String (that must not include table name)
 	 * @throws TableException
 	 * @throws IOException
 	 */
@@ -766,13 +729,9 @@ public class Table implements Iterable<Object[]>{
 
 	
 	/**
-	 * Get a {@link Table Table} from the String (that must not include table name)
 	 * @param s
 	 * @param tableName Name of the table to get
-	 * @param fieldSeparator
-	 * @param commentIdentifier
-	 * @param textQualifier
-	 * @return
+	 * @return a {@link Table Table} from the String (that must not include table name)
 	 * @throws TableException
 	 * @throws IOException
 	 */
@@ -826,7 +785,12 @@ public class Table implements Iterable<Object[]>{
 		BufferedReader reader=null;
 
 		try{
-			f=new InputStreamReader(new FileInputStream(filePath), Util.getFileEncoding(filePath));
+            String encoding = Util.getFileEncoding(filePath);
+            if(encoding != null)
+                f = new InputStreamReader(new FileInputStream(filePath), encoding);
+            else
+                f = new InputStreamReader(new FileInputStream(filePath));
+                
 			reader=new BufferedReader(f);
 
 			text_line=reader.readLine();
@@ -912,9 +876,7 @@ public class Table implements Iterable<Object[]>{
 			}
 			
 			
-		} catch(FileNotFoundException e){
-			throw e;
-		}catch(IOException e){
+		} catch(Exception e){
 			throw e;
 		}finally{
 			try{

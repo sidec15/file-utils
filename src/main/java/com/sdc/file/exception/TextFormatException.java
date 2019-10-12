@@ -9,6 +9,8 @@ package com.sdc.file.exception;
  */
 public class TextFormatException extends Exception{
 		
-	public TextFormatException(String m) {super(m);};
+	private static final long serialVersionUID = 1L;
+
+    public TextFormatException(String m) {super(m);};
 	
 }

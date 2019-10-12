@@ -3,20 +3,16 @@
  */
 package com.sdc.file.zip;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
-import java.util.zip.*;
+import java.util.zip.ZipException;
 
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipFile;
-
-import com.sdc.file.utils.Util;
 
 
 /**
@@ -32,7 +28,7 @@ public class UtilZip {
 	 * 
 	 * @param input input zip file
 	 * @param output output direcotry
-	 * @throws DecomprimerException
+	 * @throws ZipException
 	 */
 	public static void decompress(String input, String output) throws ZipException {
 		// controlli preliminari

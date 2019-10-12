@@ -219,7 +219,6 @@ public class Util {
      *            The first row (on base 1) from which read
      * @return The content of a text file
      * @throws IOException
-     * @throws Throwable
      */
     public static String[] readFileFromRow(String filePath, int firstRow) throws IOException {
 
@@ -753,7 +752,7 @@ public class Util {
     /**
      * Return the extension of the <i>File</i>. If the <i>File</i> is a <i>directory</i> return an empty string.
      * 
-     * @param File
+     * @param file
      * @return The extension of the <i>File</i>
      */
     public static String getExtention(File file) {
@@ -770,11 +769,10 @@ public class Util {
     }
 
     /**
-     * Return the extension of the <i>File</i>. If the <i>File</i> is a <i>directory</i> return an empty string.
      * 
      * @param filePath
      *            Absolute path of the file
-     * @return
+     * @return the extension of the <i>File</i>. If the <i>File</i> is a <i>directory</i> return an empty string.
      */
     public static String getExtention(String filePath) {
 
@@ -802,12 +800,10 @@ public class Util {
     }
 
     /**
-     * Return the name of the <i>File</i> without the extension.
-     * If <i>File</i> is a directory return its name.
-     * 
      * @param filePath
      *            Absolute path of the file
-     * @return
+     * @return the name of the <i>File</i> without the extension.
+     * If <i>File</i> is a directory return its name.
      */
     public static String getNameWithoutExtension(String filePath) {
 
@@ -835,12 +831,11 @@ public class Util {
     }
 
     /**
-     * Return the absolute path of the <i>File</i> without the extension.
-     * If <i>File</i> is a directory return its name.
      * 
      * @param filePath
      *            Absolute path of the file
-     * @return
+     * @return the absolute path of the <i>File</i> without the extension.
+     * If <i>File</i> is a directory return its name.
      */
     public static String getPathWithoutExtension(String filePath) {
 
@@ -983,13 +978,11 @@ public class Util {
     }
 
     /**
-     * Return the number of all the files contained in the <i>directory</i>,
+     * Return ll the files contained in the <i>directory</i>,
      * including that of its subdirectory.
-     * If the file is not a directory return 1.
-     * 
      * @param filePath
      *            Absolute path of the directory
-     * @return The number of all the files contained in the <i>directory</i>
+     * @return all the files contained in the <i>directory</i>
      */
     public static List<File> getFilesInDirectory(String filePath) {
 
@@ -998,16 +991,15 @@ public class Util {
 
 
     /**
-     * Return the number of all the files contained in the <i>directory</i>
+     * Return all the files contained in the <i>directory</i>
      * (including that of its subdirectory), that match the specified regular expression.
-     * If the file is not a directory return 1.
      * 
      * @param filePath
      *            Absolute path of the directory
      * @param regex
      *            Regular expression that the files name must match.
      *            If <code>null</code> the files will not be filtered.
-     * @return The number of all the files contained in the <i>directory</i>
+     * @return all the files contained in the <i>directory</i>
      */
     public static List<File> getFilesInDirectory(String filePath, String regex) {
 
@@ -1213,9 +1205,9 @@ public class Util {
      *            String matrix
      * @param j
      *            Column index
-     * @param j
+     * @param nCol
      *            Number of column
-     * @param commentIdentifier
+     * @param commentedRows
      *            The comment identifier
      * @param tryToFormatCommentedRow
      *            True if try to format also the commented rows
@@ -1259,6 +1251,7 @@ public class Util {
      * @param tablePrefix
      * @param tableSuffix
      * @param fieldSeparator
+     * @param textQualifier 
      * @throws TableException
      * @throws IOException
      */
@@ -1368,6 +1361,7 @@ public class Util {
      * that represents a directory seems to be platform
      * dependent. This method removes the directory
      * and all of its contents.
+     * @param directory 
      * 
      * @return true if the complete directory was removed, false if it could not be.
      *         If false is returned then some of the files in the directory may have been removed.
@@ -1413,6 +1407,7 @@ public class Util {
      * that represents a directory seems to be platform
      * dependent. This method removes the directory
      * and all of its contents.
+     * @param directory 
      * 
      * @return true if the complete directory was removed, false if it could not be.
      *         If false is returned then some of the files in the directory may have been removed.
@@ -1752,7 +1747,7 @@ public class Util {
         /*
          * Write the features to the shapefile
          */
-        Transaction transaction = new DefaultTransaction("create");
+        
 
         String typeName = newDataStore.getTypeNames()[0];
         SimpleFeatureSource featureSource = newDataStore.getFeatureSource(typeName);
@@ -1774,18 +1769,22 @@ public class Util {
              * SimpleFeatureCollection object, so we use the ListFeatureCollection
              * class to wrap our list of features.
              */
-            SimpleFeatureCollection collection = new ListFeatureCollection(featureType, features);
-            featureStore.setTransaction(transaction);
-            try {
+            Transaction transaction = null;
+            try{
+                transaction = new DefaultTransaction("create");
+                SimpleFeatureCollection collection = new ListFeatureCollection(featureType, features);
+                featureStore.setTransaction(transaction);
+
                 featureStore.addFeatures(collection);
                 transaction.commit();
             }
             catch (Exception problem) {
-                transaction.rollback();
+                if(transaction != null)
+                    transaction.rollback();
                 throw problem;
-            }
-            finally {
-                transaction.close();
+            }finally {
+                if(transaction != null)
+                    transaction.close();
             }
         }
         else {

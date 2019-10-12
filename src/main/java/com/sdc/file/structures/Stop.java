@@ -81,11 +81,10 @@ public class Stop {
 
 	//STATIC METHODS
 	/**
-	 * Return the distance [m] between the two stops, according to the specified coordinate type
 	 * @param s1
 	 * @param s2
 	 * @param cType
-	 * @return
+	 * @return the distance [m] between the two stops, according to the specified coordinate type
 	 */
 	public static double distance(Stop s1,Stop s2,COORDINATES_TYPE cType) {
 		return com.sdc.file.support.Support.getDistance(s1.getPxco(), s1.getPyco(), s2.getPxco(), s2.getPyco(), cType);
