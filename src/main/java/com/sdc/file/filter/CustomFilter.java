@@ -7,7 +7,7 @@ import java.io.File;
 
 import javax.swing.filechooser.FileFilter;
 
-import com.sdc.file.utils.Util;
+import com.sdc.file.utils.FileUtils;
 
 
 /**
@@ -38,7 +38,7 @@ public class CustomFilter extends FileFilter{
 	public boolean accept(File file) {
 		if (file.isDirectory()) return true;
 		if (extention==null) return true;
-		String ext=Util.getExtention(file).toLowerCase();
+		String ext=FileUtils.getExtention(file).toLowerCase();
 		for(int i=0;i<extention.length;i++)
 			if(ext.equals(extention[i])) return true;
 		return false;

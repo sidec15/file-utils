@@ -23,7 +23,7 @@ import org.postgis.PGgeometry;
 import com.csvreader.CsvReader;
 import com.sdc.file.exception.TableException;
 import com.sdc.file.exception.TextFormatException;
-import com.sdc.file.utils.Util;
+import com.sdc.file.utils.FileUtils;
 
 
 /**
@@ -645,7 +645,7 @@ public class Table implements Iterable<Object[]>{
 		
 		try{
 		    
-		    String encoding = Util.getFileEncoding(filePath);
+		    String encoding = FileUtils.getFileEncoding(filePath);
             if (encoding != null)
                 fr = new InputStreamReader(new FileInputStream(filePath), encoding);
             else
@@ -785,7 +785,7 @@ public class Table implements Iterable<Object[]>{
 		BufferedReader reader=null;
 
 		try{
-            String encoding = Util.getFileEncoding(filePath);
+            String encoding = FileUtils.getFileEncoding(filePath);
             if(encoding != null)
                 f = new InputStreamReader(new FileInputStream(filePath), encoding);
             else
@@ -868,11 +868,11 @@ public class Table implements Iterable<Object[]>{
 			if(makeNewFile) {
 				//create a new file
 				String now=new SimpleDateFormat("yyyyMMddHHmm").format(Calendar.getInstance().getTime());
-				String ext=Util.getExtention(filePath);
-				Util.writeFile(filePath.substring(0,filePath.length()-4) + "_" + now + "." + ext, contentToWrite, false);
+				String ext=FileUtils.getExtention(filePath);
+				FileUtils.writeFile(filePath.substring(0,filePath.length()-4) + "_" + now + "." + ext, contentToWrite, false);
 			}else {
 				//overwrite the file
-				Util.writeFile(filePath, contentToWrite, false);
+				FileUtils.writeFile(filePath, contentToWrite, false);
 			}
 			
 			

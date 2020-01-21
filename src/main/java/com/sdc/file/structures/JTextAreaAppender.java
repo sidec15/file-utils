@@ -5,7 +5,7 @@ import javax.swing.JTextArea;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.spi.LoggingEvent;
 
-import com.sdc.file.utils.Util;
+import com.sdc.file.utils.FileUtils;
 
 /**
  * A Log4J appender that empties into a text area.
@@ -64,7 +64,7 @@ public class JTextAreaAppender extends AppenderSkeleton {
             String[] s = event.getThrowableStrRep();
             if (s != null)
                 for (int i = 0; i < s.length; i++)
-                    textArea.append(s[i]+Util.NEWLINE);
+                    textArea.append(s[i]+FileUtils.NEWLINE);
         }
     }
 

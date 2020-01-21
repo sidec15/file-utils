@@ -43,7 +43,7 @@ import com.sdc.file.exception.TextFormatException;
 import com.sdc.file.structures.OS;
 import com.sdc.file.structures.Table;
 
-public class Util {
+public class FileUtils {
 
     public static String NEWLINE = System.getProperty("line.separator");
 
@@ -230,7 +230,7 @@ public class Util {
         String encoding = null;
 
         try {
-            encoding = Util.getFileEncoding(filePath);
+            encoding = FileUtils.getFileEncoding(filePath);
             if (encoding != null)
                 f = new InputStreamReader(new FileInputStream(filePath), encoding);
             else
@@ -293,7 +293,7 @@ public class Util {
         String encoding = null;
 
         try {
-            encoding = Util.getFileEncoding(filePath);
+            encoding = FileUtils.getFileEncoding(filePath);
             if (encoding != null)
                 f = new InputStreamReader(new FileInputStream(filePath), encoding);
             else
@@ -356,7 +356,7 @@ public class Util {
         String encoding = null;
 
         try {
-            encoding = Util.getFileEncoding(filePath);
+            encoding = FileUtils.getFileEncoding(filePath);
             if (encoding != null)
                 f = new InputStreamReader(new FileInputStream(filePath), encoding);
             else
@@ -441,7 +441,7 @@ public class Util {
         String encoding = null;
 
         try {
-            encoding = Util.getFileEncoding(filePath);
+            encoding = FileUtils.getFileEncoding(filePath);
             if (encoding != null)
                 f = new InputStreamReader(new FileInputStream(filePath), encoding);
             else
