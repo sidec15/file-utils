@@ -15,9 +15,14 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 import com.google.common.io.Files;
@@ -193,13 +198,33 @@ public class FileUtilsAzureBlobStorageTest {
     public void testDeleteIfExists() throws IOException {
         
         String pathname = BASE_OUTPUT + "test-delete";
-        Files.write("ciao", new File(pathname), Charset.defaultCharset());
+        File file = new File(pathname);
+        FileUtils.writeLines(file, Arrays.asList("ciao"));
         
         FileUtilsAzureBlobStorage.deleteIfExists(pathname);
         
         assertThat(new File(pathname).exists(), is(false));
         
     }
+    
+    @Test
+    public void testDate() {
+        String s = "2014-12-04T14:40:00Z";
+        
+        DateTimeFormatter dtf = DateTimeFormatter.ISO_DATE_TIME;
+        
+        LocalDateTime ldt = LocalDateTime.parse(s, dtf);
+        System.out.println(ldt);
+        
+        ZonedDateTime zdt = ZonedDateTime.parse(s, dtf);
+        System.out.println(zdt);
+        
+        System.out.println(zdt.toEpochSecond());
+        System.out.println(ZonedDateTime.of(ldt, ZoneId.of("UTC")).toEpochSecond());
+        
+        
+    }
+    
     
     private static class LinkReaderContext{
         int counter;

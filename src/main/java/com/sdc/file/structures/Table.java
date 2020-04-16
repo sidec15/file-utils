@@ -328,7 +328,8 @@ public class Table implements Iterable<Object[]>{
 	 * @param i Index of the row in the table
 	 * @throws TableException
 	 */
-	public void removeRow(int i) throws TableException {
+	@SuppressWarnings("unlikely-arg-type")
+    public void removeRow(int i) throws TableException {
 		if(i<0 || i >nRows) throw new TableException("Wrong record index");
 		content.remove(coll_nonCommentedRows.get(i));
 		
